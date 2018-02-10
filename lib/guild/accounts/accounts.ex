@@ -38,6 +38,11 @@ defmodule Guild.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
+  Same as `get_user!/1` but will return nil instead of raise an error
+  """
+  def get_user(id), do: Repo.get(User, id)
+
+  @doc """
   Creates a user.
 
   ## Examples
@@ -112,7 +117,7 @@ defmodule Guild.Accounts do
 
   """
   def get_user_by_email(email) do
-    Users
+    User
     |> where([u], u.email == ^email)
     |> Repo.one
   end
@@ -140,5 +145,101 @@ defmodule Guild.Accounts do
       nil -> Comeonin.Bcrypt.dummy_checkpw()
       _ -> Comeonin.Bcrypt.checkpw(password, user.password_hash)
     end
+  end
+
+  alias Guild.Accounts.ChannelUser
+
+  @doc """
+  Returns the list of channel_users.
+
+  ## Examples
+
+      iex> list_channel_users()
+      [%ChannelUser{}, ...]
+
+  """
+  def list_channel_users do
+    Repo.all(ChannelUser)
+  end
+
+  @doc """
+  Gets a single channel_user.
+
+  Raises `Ecto.NoResultsError` if the Channel user does not exist.
+
+  ## Examples
+
+      iex> get_channel_user!(123)
+      %ChannelUser{}
+
+      iex> get_channel_user!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_channel_user!(id), do: Repo.get!(ChannelUser, id)
+
+  @doc """
+  Creates a channel_user.
+
+  ## Examples
+
+      iex> create_channel_user(%{field: value})
+      {:ok, %ChannelUser{}}
+
+      iex> create_channel_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_channel_user(attrs \\ %{}) do
+    %ChannelUser{}
+    |> ChannelUser.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a channel_user.
+
+  ## Examples
+
+      iex> update_channel_user(channel_user, %{field: new_value})
+      {:ok, %ChannelUser{}}
+
+      iex> update_channel_user(channel_user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_channel_user(%ChannelUser{} = channel_user, attrs) do
+    channel_user
+    |> ChannelUser.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a ChannelUser.
+
+  ## Examples
+
+      iex> delete_channel_user(channel_user)
+      {:ok, %ChannelUser{}}
+
+      iex> delete_channel_user(channel_user)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_channel_user(%ChannelUser{} = channel_user) do
+    Repo.delete(channel_user)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking channel_user changes.
+
+  ## Examples
+
+      iex> change_channel_user(channel_user)
+      %Ecto.Changeset{source: %ChannelUser{}}
+
+  """
+  def change_channel_user(%ChannelUser{} = channel_user) do
+    ChannelUser.changeset(channel_user, %{})
   end
 end

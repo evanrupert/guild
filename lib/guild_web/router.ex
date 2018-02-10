@@ -5,7 +5,13 @@ defmodule GuildWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", GuildWeb do
+  scope "/api" do
     pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: GuildWeb.GraphQL.Schema
+
+    forward "/", Absinthe.Plug,
+      schema: GuildWeb.GraphQL.Schema
   end
 end
