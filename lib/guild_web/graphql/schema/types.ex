@@ -12,7 +12,6 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     field :inserted_at, :datetime
   end
 
-
   scalar :datetime, name: "DateTime" do
     parse fn input ->
       case DateTime.from_iso8601(input.value) do
