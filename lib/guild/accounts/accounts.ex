@@ -6,7 +6,9 @@ defmodule Guild.Accounts do
   import Ecto.Query, warn: false
   alias Guild.Repo
 
-  alias Guild.Accounts.User
+  alias Guild.Accounts.{User, ChannelUser}
+  alias Guild.Groups.Channel
+  
 
   @doc """
   Returns the list of users.
@@ -41,6 +43,33 @@ defmodule Guild.Accounts do
   Same as `get_user!/1` but will return nil instead of raise an error
   """
   def get_user(id), do: Repo.get(User, id)
+
+  @doc """
+  Get all channels associated with a user
+  """
+  def get_user_channels(user_id) do
+    query = 
+      from cu in ChannelUser,
+        join: c in Channel, where: cu.channel_id == c.id,
+        where: cu.user_id == ^user_id,
+        select: %{
+          creator: c.creator,
+          end: c.end,
+          image_url: c.image_url,
+          latitude: c.latitude,
+          longitude: c.longitude,
+          name: c.name,
+          start: c.start,
+          active: c.active,
+          role: cu.role,
+          user_alias: cu.alias,
+          id: c.id,
+          inserted_at: c.inserted_at,
+          updated_at: c.updated_at
+        }
+    
+    Repo.all(query)
+  end
 
   @doc """
   Creates a user.

@@ -10,4 +10,10 @@ defmodule GuildWeb.GraphQL.Resolvers do
     end
   end
 
+  def user_channels(%Guild.Accounts.User{} = user, _args, _resolution) do
+    channels = Guild.Accounts.get_user_channels(user.id)
+
+    {:ok, channels}
+  end
+
 end
