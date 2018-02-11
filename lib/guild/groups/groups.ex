@@ -7,6 +7,7 @@ defmodule Guild.Groups do
   alias Guild.Repo
 
   alias Guild.Groups.Channel
+  alias Guild.Accounts.{ChannelUser, User}
 
   @doc """
   Returns the list of channels.
@@ -36,6 +37,11 @@ defmodule Guild.Groups do
 
   """
   def get_channel!(id), do: Repo.get!(Channel, id)
+
+  @doc """
+  Same as `get_channel!/1` but will return nil and not raise error
+  """
+  def get_channel(id), do: Repo.get(Channel, id)
 
   @doc """
   Creates a channel.
@@ -100,6 +106,26 @@ defmodule Guild.Groups do
   """
   def change_channel(%Channel{} = channel) do
     Channel.changeset(channel, %{})
+  end
+
+  @doc """
+  Get all users in a channel
+  """
+  def get_channel_users(channel_id) do
+    query =
+      from cu in ChannelUser,
+        join: u in User, where: cu.user_id == u.id,
+        where: cu.channel_id == ^channel_id,
+        select: %{
+          role: cu.role,
+          user_alias: cu.alias,
+          username: u.username,
+          email: u.email,
+          image_url: u.image_url,
+          password_hash: u.password_hash
+        }
+
+    Repo.all(query)
   end
 
 end
