@@ -30,5 +30,17 @@ defmodule GuildWeb.GraphQL.Schema do
       arg :id, non_null(:id)
       resolve &Resolvers.find_message/3
     end
+
+    # Mutations
+
+    @desc "Create a User"
+    field :create_user, type: :user do
+      arg :username, non_null(:string)
+      arg :email, non_null(:string)
+      arg :password, non_null(:password)
+      arg :image_url, :string
+      resolve &Resolvers.create_user/3
+    end
+
   end
 end
