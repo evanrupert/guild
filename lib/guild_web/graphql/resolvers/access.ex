@@ -6,7 +6,7 @@ defmodule GuildWeb.GraphQL.Resolvers.Access do
   def get_self(_parent, _args, %{context: %{user_id: user_id}}) do
     case Accounts.get_user(user_id) do
       nil ->
-        {:error, "User ID: #{id} not found"}
+        {:error, "User ID: #{user_id} not found"}
       
       user ->
         {:ok, user}
