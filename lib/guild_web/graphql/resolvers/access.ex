@@ -3,8 +3,8 @@ defmodule GuildWeb.GraphQL.Resolvers.Access do
   alias Guild.{Groups, Accounts, Content}
 
 
-  def find_user(_parent, %{id: id}, _resolution) do
-    case Accounts.get_user(id) do
+  def get_self(_parent, _args, %{context: %{user_id: user_id}}) do
+    case Accounts.get_user(user_id) do
       nil ->
         {:error, "User ID: #{id} not found"}
       

@@ -9,10 +9,9 @@ defmodule GuildWeb.GraphQL.Schema do
     
     @desc "Get a specific user by id"
     field :user, :user do
-      arg :id, non_null(:id)
-      resolve &Resolvers.Access.find_user/3
+      resolve &Resolvers.Access.get_self/3
     end
- 
+
     @desc "Get a specific channel by id"
     field :channel, :channel do
       arg :id, non_null(:id)
