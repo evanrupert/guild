@@ -10,25 +10,25 @@ defmodule GuildWeb.GraphQL.Schema do
     @desc "Get a specific user by id"
     field :user, :user do
       arg :id, non_null(:id)
-      resolve &Resolvers.find_user/3
+      resolve &Resolvers.Access.find_user/3
     end
  
     @desc "Get a specific channel by id"
     field :channel, :channel do
       arg :id, non_null(:id)
-      resolve &Resolvers.find_channel/3
+      resolve &Resolvers.Access.find_channel/3
     end
 
     @desc "Get all channels"
     field :channels, list_of(:channel) do
       arg :active, :boolean
-      resolve &Resolvers.list_channels/3
+      resolve &Resolvers.Access.list_channels/3
     end
 
     @desc "Get a specific message"
     field :message, :message do
       arg :id, non_null(:id)
-      resolve &Resolvers.find_message/3
+      resolve &Resolvers.Access.find_message/3
     end
 
     # Mutations
@@ -37,10 +37,19 @@ defmodule GuildWeb.GraphQL.Schema do
     field :create_user, type: :user do
       arg :username, non_null(:string)
       arg :email, non_null(:string)
-      arg :password, non_null(:password)
+      arg :password, non_null(:string)
       arg :image_url, :string
-      resolve &Resolvers.create_user/3
+      resolve &Resolvers.Mutations.create_user/3
     end
+
+    # @desc "Update an existing user"
+    # field :update_user, type: :user do
+    #   arg :username, non_null(:string)
+    #   arg :email, non_null(:string)
+    #   arg :password, non_null(:string)
+    #   arg :image_url, :string
+    #   resolve &Resolvers.Mutations.update_user/3
+    # end
 
   end
 end

@@ -1,6 +1,7 @@
-defmodule GuildWeb.GraphQL.Resolvers do
+defmodule GuildWeb.GraphQL.Resolvers.Access do
   
   alias Guild.{Groups, Accounts, Content}
+
 
   def find_user(_parent, %{id: id}, _resolution) do
     case Accounts.get_user(id) do
@@ -59,21 +60,6 @@ defmodule GuildWeb.GraphQL.Resolvers do
     users = Groups.get_channel_users(channel.id)
 
     {:ok, users}
-  end
-
-  def create_user(_parent, args, _resolution) do
-    with {:ok, user} <- Accounts.create_user(args) do
-      {:ok, user}
-    else
-      {:error, changeset} ->
-        {:error, translate_errors(changeset)}
-    end
-  end
-
-  defp translate_errors(changeset) do
-    for {key, {reason, _}} <- changeset.errors do
-      Atom.to_string(key) <> ": " <> reason
-    end
   end
 
 end

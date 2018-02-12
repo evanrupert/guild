@@ -15,13 +15,14 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     field :inserted_at, :naive_datetime
     
     field :channels, list_of(:user_channel) do
-      resolve &Resolvers.user_channels/3
+      resolve &Resolvers.Access.user_channels/3
     end
   end
 
   # Same as :user object but with the addtion channel-specific fields of
   # role and user_alias
   object :channel_user do
+    field :id, :id
     field :username, :string
     field :email, :string
     field :image_url, :string
@@ -45,7 +46,7 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     field :active, :boolean
 
     field :users, list_of(:channel_user) do
-      resolve &Resolvers.channel_users/3
+      resolve &Resolvers.Access.channel_users/3
     end
   end
 

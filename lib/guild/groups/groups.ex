@@ -126,6 +126,7 @@ defmodule Guild.Groups do
         join: u in User, where: cu.user_id == u.id,
         where: cu.channel_id == ^channel_id,
         select: %{
+          id: u.id,
           role: cu.role,
           user_alias: cu.alias,
           username: u.username,

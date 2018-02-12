@@ -44,3 +44,7 @@ config :guild, Guild.Repo,
   database: "guild_dev",
   hostname: "localhost",
   pool_size: 10
+
+
+config :guild,
+  secret_key: "y!{!gK9CS,PgECn9tu]n]8i`^]0mF`b.xk/&-z`U-k7[uj|%[5^@jRRh25g8kZG"
