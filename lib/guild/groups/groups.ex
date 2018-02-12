@@ -23,6 +23,15 @@ defmodule Guild.Groups do
   end
 
   @doc """
+  Returns the list of all channels marked active
+  """
+  def list_active_channels do
+    Channel
+    |> where([c], c.active == true)
+    |> Repo.all
+  end
+
+  @doc """
   Gets a single channel.
 
   Raises `Ecto.NoResultsError` if the Channel does not exist.

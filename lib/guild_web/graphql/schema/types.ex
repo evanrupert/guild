@@ -19,7 +19,6 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     end
   end
 
-
   # Same as :user object but with the addtion channel-specific fields of
   # role and user_alias
   object :channel_user do
@@ -43,6 +42,7 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     field :longitude, :decimal
     field :updated_at, :naive_datetime
     field :inserted_at, :naive_datetime
+    field :active, :boolean
 
     field :users, list_of(:channel_user) do
       resolve &Resolvers.channel_users/3
@@ -63,10 +63,18 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     field :longitude, :decimal
     field :updated_at, :naive_datetime
     field :inserted_at, :naive_datetime
+    field :active, :boolean
 
     # User specific fields
     field :role, :integer
     field :user_alias, :string
+  end
+
+
+  object :message do
+    field :body, :string
+    field :from, :user
+    field :channel, :channel
   end
 
 end

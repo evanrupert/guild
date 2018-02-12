@@ -23,6 +23,8 @@ defmodule Guild.Accounts.User do
     |> unique_constraint(:email)
   end
 
+  # This is specifically used for creating a user because it will
+  # transform the password into a password hash before storage
   def registration_changeset(%User{} = user, attrs) do
     user
     |> changeset(attrs)
