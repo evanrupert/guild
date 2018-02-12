@@ -23,11 +23,29 @@ defmodule Guild.Groups do
   end
 
   @doc """
-  Returns the list of all channels marked active
+  Returns the list of all channels only marked public
+  """
+  def list_public_channels do
+    Channel
+    |> where([c], c.public == true)
+    |> Repo.all
+  end
+
+  @doc """
+  Returns the list of all channels only marked active
   """
   def list_active_channels do
     Channel
     |> where([c], c.active == true)
+    |> Repo.all
+  end
+
+  @doc """
+  Returns the list of all channels marked active and public
+  """
+  def list_public_active_channels do
+    Channel
+    |> where([c], c.active == true and c.public == true)
     |> Repo.all
   end
 

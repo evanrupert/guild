@@ -25,15 +25,17 @@ defmodule GuildWeb.GraphQL.Resolvers.Access do
 
   @doc """
   Get all channels, if active argument is specified then only
-  get the channels marked active
+  get the channels marked active and vica versa with public argument
   """
-  def list_channels(_parent, %{active: true}, _resolution) do
-    {:ok, Groups.list_active_channels}
+  def list_channels(_parent, %{active: true, public: true}, _resolution) do
+    {:ok, Groups.list_public_active_channels}
   end
 
-  def list_channels(_parent, _args, _resolution) do
-    {:ok, Groups.list_channels}
-  end
+  def list_channels(_parent, %{public: true}, _resolution), do: {:ok, Groups.list_public_channels}
+
+  def list_channels(_parent, %{active: true}, _resolution), do: {:ok, Groups.list_active_channels}
+
+  def list_channels(_parent, _args, _resolution), do: {:ok, Groups.list_channels}
 
   def find_message(_parent, %{id: id}, _resolution) do
     with %Content.Message{} = message <- Content.get_message(id),
@@ -50,8 +52,8 @@ defmodule GuildWeb.GraphQL.Resolvers.Access do
     end
   end
 
-  def user_channels(%Accounts.User{} = user, _args, _resolution) do
-    channels = Accounts.get_user_channels(user.id)
+  def user_channels(%Accounts.User{} = user, args, _resolution) do
+    channels = Accounts.get_user_channels(user.id, Map.get(args, :active), Map.get(args, :public))
 
     {:ok, channels}
   end

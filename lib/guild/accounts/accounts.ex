@@ -47,10 +47,10 @@ defmodule Guild.Accounts do
   @doc """
   Get all channels associated with a user
   """
-  def get_user_channels(user_id) do
+  def get_user_channels(user_id, active, public) do
     query = 
-      from cu in ChannelUser,
-        join: c in Channel, where: cu.channel_id == c.id,
+      from c in Channel,
+        join: cu in ChannelUser, where: cu.channel_id == c.id,
         where: cu.user_id == ^user_id,
         select: %{
           creator: c.creator,
@@ -61,14 +61,27 @@ defmodule Guild.Accounts do
           name: c.name,
           start: c.start,
           active: c.active,
+          public: c.public,
           role: cu.role,
           user_alias: cu.alias,
           id: c.id,
           inserted_at: c.inserted_at,
           updated_at: c.updated_at
         }
-    
-    Repo.all(query)
+
+    active_query = if active do
+      query |> where([c], c.active == true)
+    else
+      query
+    end
+
+    public_query = if public do
+      active_query |> where([c], c.public == true)
+    else
+      active_query
+    end
+
+    Repo.all(public_query)
   end
 
   @doc """

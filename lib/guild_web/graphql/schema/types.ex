@@ -15,6 +15,8 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     field :inserted_at, :naive_datetime
     
     field :channels, list_of(:user_channel) do
+      arg :active, :boolean
+      arg :public, :boolean
       resolve &Resolvers.Access.user_channels/3
     end
   end
@@ -44,6 +46,7 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     field :updated_at, :naive_datetime
     field :inserted_at, :naive_datetime
     field :active, :boolean
+    field :public, :boolean
 
     field :users, list_of(:channel_user) do
       resolve &Resolvers.Access.channel_users/3
@@ -65,6 +68,7 @@ defmodule GuildWeb.GraphQL.Schema.Types do
     field :updated_at, :naive_datetime
     field :inserted_at, :naive_datetime
     field :active, :boolean
+    field :public, :boolean
 
     # User specific fields
     field :role, :integer

@@ -13,6 +13,7 @@ defmodule Guild.Groups.Channel do
     field :name, :string
     field :start, :naive_datetime
     field :active, :boolean
+    field :public, :boolean
 
     timestamps()
   end

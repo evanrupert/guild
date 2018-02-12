@@ -21,6 +21,7 @@ defmodule GuildWeb.GraphQL.Schema do
     @desc "Get all channels"
     field :channels, list_of(:channel) do
       arg :active, :boolean
+      arg :public, :boolean
       resolve &Resolvers.Access.list_channels/3
     end
 
@@ -40,15 +41,6 @@ defmodule GuildWeb.GraphQL.Schema do
       arg :image_url, :string
       resolve &Resolvers.Mutations.create_user/3
     end
-
-    # @desc "Update an existing user"
-    # field :update_user, type: :user do
-    #   arg :username, non_null(:string)
-    #   arg :email, non_null(:string)
-    #   arg :password, non_null(:string)
-    #   arg :image_url, :string
-    #   resolve &Resolvers.Mutations.update_user/3
-    # end
 
   end
 end
