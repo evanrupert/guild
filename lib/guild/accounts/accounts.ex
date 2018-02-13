@@ -48,6 +48,8 @@ defmodule Guild.Accounts do
   Get all channels associated with a user
   """
   def get_user_channels(user_id, active, public) do
+    # Splice the Channel and ChannelUser tables to get both channel-only data
+    # and also channel-user association data in one map
     query = 
       from c in Channel,
         join: cu in ChannelUser, where: cu.channel_id == c.id,
@@ -69,12 +71,14 @@ defmodule Guild.Accounts do
           updated_at: c.updated_at
         }
 
+    # If active is specified then filter out unactive channels
     active_query = if active do
       query |> where([c], c.active == true)
     else
       query
     end
 
+    # If public is specified then filter out private channels
     public_query = if public do
       active_query |> where([c], c.public == true)
     else
