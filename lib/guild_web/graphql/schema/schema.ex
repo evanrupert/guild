@@ -32,7 +32,7 @@ defmodule GuildWeb.GraphQL.Schema do
       resolve &Resolvers.Access.find_message/3
     end
 
-    # Mutations
+    # User Mutations
 
     @desc "Create a User"
     field :create_user, type: :user do

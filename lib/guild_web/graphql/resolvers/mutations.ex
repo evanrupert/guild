@@ -26,6 +26,9 @@ defmodule GuildWeb.GraphQL.Resolvers.Mutations do
   def delete_user(_parent, _args, %{context: %{user_id: user_id}}) do
     with %Accounts.User{} = user <- Accounts.get_user(user_id),
          {:ok, deleted_user} <- Accounts.delete_user(user) do
+      # Delete all ChannelUser records associated with this user
+      Accounts.delete_channel_users_by_user(user_id)
+      
       {:ok, deleted_user}
     else
       nil ->

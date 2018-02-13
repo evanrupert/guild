@@ -9,15 +9,13 @@ defmodule GuildWeb.Router do
     plug GuildWeb.Plugs.GraphQLAuth
   end
 
-  scope "/auth" do
-    pipe_through :api
 
-    post "/", GuildWeb.AuthController, :authenticate
-  end
-
-  # IMPORTANT: Debugging only
+  # IMPORTANT: Remove "/graphiql" before prod
   scope "/api" do
     pipe_through :api
+
+    post "/user", GuildWeb.UserController, :create
+    post "/auth", GuildWeb.AuthController, :authenticate
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
       schema: GuildWeb.GraphQL.Schema

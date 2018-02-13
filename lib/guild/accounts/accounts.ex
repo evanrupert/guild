@@ -277,6 +277,24 @@ defmodule Guild.Accounts do
   end
 
   @doc """
+  Deletes all channel_users with the given server id
+  """
+  def delete_channel_users_by_channel(channel_id) do
+    ChannelUser
+    |> where([cu], cu.channel_id == ^channel_id)
+    |> Repo.delete_all
+  end
+
+  @doc """
+  Deletes all channel_users with the given user_id
+  """
+  def delete_channel_users_by_user(user_id) do
+    ChannelUser
+    |> where([cu], cu.user_id == ^user_id)
+    |> Repo.delete_all
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking channel_user changes.
 
   ## Examples
