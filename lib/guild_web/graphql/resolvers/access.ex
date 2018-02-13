@@ -41,15 +41,19 @@ defmodule GuildWeb.GraphQL.Resolvers.Access do
     with %Content.Message{} = message <- Content.get_message(id),
          %Accounts.User{} = user <- Accounts.get_user(message.from),
          %Groups.Channel{} = channel <- Groups.get_channel(message.channel_id) do
-      msg = message
-            |> Map.drop([:channel_id, :from])
-            |> Map.merge(%{channel: channel, from: user})
-      {:ok, msg}
+      {:ok, replace_ids_with_maps(message, channel, user)}
     else
       # Hope that the user or channel match dosn't somehow fail
       nil ->
         {:error, "Message ID: #{id} not found"}
     end
+  end
+
+  defp replace_ids_with_maps(message, channel, user) do
+    # replace the channel_id and from fields with actual user/channel maps instead of just ids
+    message
+    |> Map.drop([:channel_id, :from])
+    |> Map.merge(%{channel: channel, from: user})
   end
 
   def user_channels(%Accounts.User{} = user, args, _resolution) do

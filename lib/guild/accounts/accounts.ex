@@ -71,22 +71,19 @@ defmodule Guild.Accounts do
           updated_at: c.updated_at
         }
 
-    # If active is specified then filter out unactive channels
-    active_query = if active do
-      query |> where([c], c.active == true)
-    else
-      query
-    end
-
-    # If public is specified then filter out private channels
-    public_query = if public do
-      active_query |> where([c], c.public == true)
-    else
-      active_query
-    end
-
-    Repo.all(public_query)
+    query
+    |> filter_public(public)
+    |> filter_active(active)
+    |> Repo.all()
   end
+
+  defp filter_public(query, true), do: query |> where([c], c.public == true)
+
+  defp filter_public(query, _), do: query
+
+  defp filter_active(query, true), do: query |> where([c], c.active == true)
+
+  defp filter_active(query, _), do: query
 
   @doc """
   Creates a user.
